@@ -29,12 +29,12 @@ public class calculator extends JFrame{
 		
 		// 숫자 입력 창
 		inputSpace = new JTextField() ; 
-		inputSpace.setEditable(true) ; 
+		inputSpace.setEditable(false) ; 
 		inputSpace.setBackground(Color.WHITE);
 		inputSpace.setHorizontalAlignment(JTextField.RIGHT);
 		inputSpace.setFont(new Font("Arial", Font.BOLD, 50) );
 		inputSpace.setBounds(8, 10, 255, 70); // 위치와 크기 (x:8 y:10 290 x 70)
-		inputSpace.addKeyListener(new myKeyAdapter());
+//		inputSpace.addKeyListener(new myKeyAdapter());
 		
 		add(inputSpace) ;
 		
@@ -89,7 +89,6 @@ public class calculator extends JFrame{
 					inputSpace.setText(inputSpace.getText().substring(0, length - 1));
 				}
 			}
-			
 			// 입력 값이 연산자 일때
 			  else if (operation.equals("+") || operation.equals("-") || operation.equals("*") ||operation.equals("/")|| operation.equals("^")|| operation.equals("v")) {
 				// 음수 값 허용해주는 경우
@@ -103,24 +102,6 @@ public class calculator extends JFrame{
 				inputSpace.setText(inputSpace.getText()+ event.getActionCommand());
 			}
 			prev_num = event.getActionCommand() ; 
-		}
-	}
-	
-	// 키보드를 통한 입력값 처리
-	class myKeyAdapter extends KeyAdapter 
-	{
-		public void keyPressed(KeyEvent e) {
-			
-			// 엔터 키를 통해 계산 결과 출력 가능
-			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-				String result = Double.toString(calculate(inputSpace.getText())) ;
-				inputSpace.setText(""+result);
-				num = "";	
-			}
-			else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-				inputSpace.setText("");
-			 }
-			
 		}
 	}
 		
@@ -170,13 +151,13 @@ public class calculator extends JFrame{
 			    equation.remove(i); // 지수 제거
 			    i --;
 			} 
-//			else if (s.equals("v")) {
-//	            double number = Double.parseDouble(equation.get(i - 1));
-//	            equation.set(i - 1, Double.toString(Math.sqrt(number)));
-//	            equation.remove(i); // "^" 제거
-//	            equation.remove(i); // 지수 제거
-//	            i--;
-//	        }
+			else if (s.equals("v")) {
+	            double number = Double.parseDouble(equation.get(i - 1));
+	            equation.set(i - 1, Double.toString(Math.sqrt(number)));
+	            equation.remove(i); // "^" 제거
+	            equation.remove(i); // 지수 제거
+	            i--;
+	        }
 	    
 			
 			// 어떤 연산자가 나오는지에 따라 모드가 변환됨
@@ -233,32 +214,6 @@ public class calculator extends JFrame{
 		
 		return res ;	
 	}
-	
-	public double rootCalculate(String inputText) {
-		fullTextParsing(inputText) ; 
-			
-		// 초깃값을 추가해 첫 연산이 뺄셈일때 맨 처음 0에서 첫 숫자를 더하고 빼기 연산 할 수 있게 해줌
-		equation.add(0, "0");
-		equation.add(1, "+");
-			
-		double res = 0 ; // 누적되는 결과 값
-		double current = 0 ; // 현재 처리되고 있는 숫자
-		String mode = "add" ; // 모드는 add로 초기화 
-			
-		// 곱셈 나눗셈 연산자 부터 먼저 계산하도록
-		for (int i = 0 ; i < equation.size() ; i++) {
-			String s = equation.get(i) ; 	
-			if (s.equals("v")) {
-				double number = Double.parseDouble(equation.get(i - 1));
-		        equation.set(i - 1, Double.toString(Math.sqrt(number)));
-		        equation.remove(i); // "^" 제거
-		        i--;
-		        
-		        res = Double.parseDouble(equation.get(0)) ;
-		        
-		        }res = Math.round(res*1000000) / 1000000.0 ;
-			} return res ; 
-		}
 	
 }
 
